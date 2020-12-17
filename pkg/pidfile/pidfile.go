@@ -2,10 +2,11 @@ package pidfile
 
 import (
 	"errors"
-	"flag"
 	"io/ioutil"
 	"os"
 	"strconv"
+
+	"github.com/spf13/pflag"
 )
 
 func WritePIDFile(pidFilePath string) error {
@@ -19,6 +20,6 @@ func WritePIDFile(pidFilePath string) error {
 	return nil
 }
 
-func AddFlag(fs *flag.FlagSet, pidFilePath *string, defaultValue string) {
+func AddFlag(fs *pflag.FlagSet, pidFilePath *string, defaultValue string) {
 	fs.StringVar(pidFilePath, "pid-file", defaultValue, "file to write process id")
 }
