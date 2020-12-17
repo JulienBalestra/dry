@@ -28,7 +28,6 @@ func NewTickNow(ctx context.Context, duration time.Duration) *TickNow {
 			case <-tick.Done():
 				cancel()
 				t.C <- struct{}{}
-				return
 			}
 		}
 	}()
