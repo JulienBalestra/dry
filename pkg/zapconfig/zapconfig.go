@@ -18,6 +18,6 @@ func NewZapConfig() *zap.Config {
 }
 
 func epochTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-	secs := t.Second()
-	enc.AppendInt(secs)
+	secs := t.Unix()
+	enc.AppendInt64(secs)
 }
