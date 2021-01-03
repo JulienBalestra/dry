@@ -18,6 +18,6 @@ func NewZapConfig() *zap.Config {
 }
 
 func epochTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-	// 1609688235.12
-	enc.AppendFloat64(float64(t.UnixNano()/10000000) / 100)
+	// 1609688235.123
+	enc.AppendFloat64(float64(t.UnixNano()/10000000) / 10)
 }
