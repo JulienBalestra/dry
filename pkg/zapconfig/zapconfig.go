@@ -9,13 +9,11 @@ import (
 
 func NewZapConfig() *zap.Config {
 	zapConfig := zap.NewProductionConfig()
-	zapConfig.EncoderConfig = zapcore.EncoderConfig{
-		MessageKey: "m",
-		LevelKey:   "l",
-		TimeKey:    "ts",
-		EncodeTime: epochTimeEncoder,
-		CallerKey:  "c",
-	}
+	zapConfig.EncoderConfig.MessageKey = "m"
+	zapConfig.EncoderConfig.LevelKey = "l"
+	zapConfig.EncoderConfig.TimeKey = "ts"
+	zapConfig.EncoderConfig.EncodeTime = epochTimeEncoder
+	zapConfig.EncoderConfig.CallerKey = "c"
 	return &zapConfig
 }
 
