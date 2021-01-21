@@ -8,12 +8,12 @@ import (
 	"github.com/stretchr/testify/assert"
 )
 
-func TestNewTickNow(t *testing.T) {
+func TestNewTickNowWithContext(t *testing.T) {
 	const period = time.Millisecond * 100
 	const factor = 3
 	const timeout = period * factor
 	ctx, cancel := context.WithTimeout(context.Background(), timeout)
-	tick := NewTickNow(ctx, period)
+	tick := NewTickNowWithContext(ctx, period)
 	incr := 0
 	for {
 		select {
