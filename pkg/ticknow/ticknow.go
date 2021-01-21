@@ -7,27 +7,58 @@ import (
 
 // TickNow is a convenient wrapper over time.TickNow to immediately tick
 type TickNow struct {
-	C chan struct{}
+	C      chan time.Time
+	ctx    context.Context
+	cancel context.CancelFunc
 }
 
-// New creates and starts a ticker with an immediate tick
-func NewTickNow(ctx context.Context, duration time.Duration) *TickNow {
+type WithContext struct {
+	C chan time.Time
+}
+
+func NewTickNow(duration time.Duration) *TickNow {
+	ctx, cancel := context.WithCancel(context.TODO())
 	t := &TickNow{
-		C: make(chan struct{}, 1),
+		C:      make(chan time.Time, 1),
+		ctx:    ctx,
+		cancel: cancel,
 	}
-	t.C <- struct{}{}
 	go func() {
+		ticker := time.NewTicker(duration)
+		t.C <- time.Now()
 		for {
-			tick, cancel := context.WithTimeout(ctx, duration)
 			select {
 			case <-ctx.Done():
-				cancel()
-				close(t.C)
+				ticker.Stop()
 				return
 
-			case <-tick.Done():
-				cancel()
-				t.C <- struct{}{}
+			case tick := <-ticker.C:
+				t.C <- tick
+			}
+		}
+	}()
+	return t
+}
+
+func (t *TickNow) Stop() {
+	t.cancel()
+}
+
+func NewTickNowWithContext(ctx context.Context, duration time.Duration) *WithContext {
+	t := &WithContext{
+		C: make(chan time.Time, 1),
+	}
+	go func() {
+		ticker := time.NewTicker(duration)
+		t.C <- time.Now()
+		for {
+			select {
+			case <-ctx.Done():
+				ticker.Stop()
+				return
+
+			case tick := <-ticker.C:
+				t.C <- tick
 			}
 		}
 	}()
