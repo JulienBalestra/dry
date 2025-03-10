@@ -32,7 +32,7 @@ func NotifySignals(ctx context.Context, sigusr1 func()) {
 				_ = pprof.Lookup("goroutine").WriteTo(os.Stdout, 2)
 
 			case syscall.SIGHUP:
-				// nohup
+				// noop
 
 			default:
 				zap.L().Info("end of system signal handling")

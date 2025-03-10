@@ -1,4 +1,4 @@
-TARGET=tree
+TARGET=example
 COMMIT=$(shell git rev-parse HEAD)
 VERSION=$(shell git describe --exact-match --tags $(git log -n1 --pretty='%h'))
 
@@ -7,13 +7,13 @@ VERSION_FLAGS=-ldflags '-s -w \
     -X github.com/JulienBalestra/dry/pkg/version.Commit=$(COMMIT)'
 
 arm:
-	GOARCH=$@ GOARM=$(GOARM) go build -i -o bin/$(TARGET)-$@ $(VERSION_FLAGS) main/main.go
+	GOARCH=$@ GOARM=$(GOARM) go build -o bin/$(TARGET)-$@ $(VERSION_FLAGS) main.go
 
 arm64:
-	GOARCH=$@ go build -i -o bin/$(TARGET)-$@ $(VERSION_FLAGS) main/main.go
+	GOARCH=$@ go build -o bin/$(TARGET)-$@ $(VERSION_FLAGS) main.go
 
 amd64:
-	go build -o bin/$(TARGET)-$@ $(VERSION_FLAGS) main/main.go
+	go build -o bin/$(TARGET)-$@ $(VERSION_FLAGS) main.go
 
 clean: fmt lint import ineffassign test vet
 	$(RM) -v bin/*
